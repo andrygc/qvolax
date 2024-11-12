@@ -1,0 +1,135 @@
+<IfModule mod_mime.c>
+  # ----------------------------------------------------------------------
+  # UTF-8 encoding
+  # ----------------------------------------------------------------------
+
+  # use utf-8 encoding for anything served text/plain or text/html
+  AddDefaultCharset utf-8
+
+  # force utf-8 for a number of file formats
+  AddCharset utf-8 .html .css .js .xml .json .rss
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Turn on XSS prevention tools
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # prevent mime based attacks
+  Header set X-Content-Type-Options "nosniff"
+
+  # Don't allow any pages to be framed - Defends against CSRF
+  Header always set X-Frame-Options DENY
+
+  # Add Referrer Policy
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Eliminate ETags
+  Header unset ETag
+
+  # Hide PHP version
+  Header unset X-Powered-By
+
+  # Connection keep-alive
+  Header set Connection keep-alive
+    
+  <FilesMatch "\.(txt|xml|js)$">
+    Header set Cache-Control "max-age=2592000"
+  </FilesMatch>
+   
+  <FilesMatch "\.(css)$">
+    Header set Cache-Control "max-age=2592000"
+  </FilesMatch>
+   
+  <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|mp4|m4v|ogg|webm|aac)$">
+    Header set Cache-Control "max-age=2592000"
+  </FilesMatch>
+   
+  <FilesMatch "\.(jpg|jpeg|png|gif|swf|webp)$">
+    Header set Cache-Control "max-age=2592000"
+  </FilesMatch>
+
+  <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+    Header unset Cache-Control
+  </FilesMatch>
+</IfModule>
+FileETag None
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault A2592000
+   
+  <FilesMatch "\.(txt|xml|js)$">
+    ExpiresDefault A2592000
+  </FilesMatch>
+   
+  <FilesMatch "\.(css)$">
+    ExpiresDefault A2592000
+  </FilesMatch>
+   
+  <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|mp4|m4v|ogg|webm|aac)$">
+    ExpiresDefault A2592000
+  </FilesMatch>
+   
+  <FilesMatch "\.(jpg|jpeg|png|gif|swf|webp)$">
+    ExpiresDefault A2592000
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_php4.c>
+  php_value zlib.output_compression 16386
+  php_value expose_php Off
+</IfModule>
+
+<IfModule mod_deflate.c>
+    <IfModule mod_setenvif.c>
+        <IfModule mod_headers.c>
+            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+            RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+        </IfModule>
+    </IfModule>
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE "application/atom+xml" \
+                                      "application/javascript" \
+                                      "application/json" \
+                                      "application/ld+json" \
+                                      "application/manifest+json" \
+                                      "application/rdf+xml" \
+                                      "application/rss+xml" \
+                                      "application/schema+json" \
+                                      "application/vnd.geo+json" \
+                                      "application/vnd.ms-fontobject" \
+                                      "application/x-font-ttf" \
+                                      "application/x-javascript" \
+                                      "application/x-web-app-manifest+json" \
+                                      "application/xhtml+xml" \
+                                      "application/xml" \
+                                      "font/eot" \
+                                      "font/opentype" \
+                                      "image/bmp" \
+                                      "image/svg+xml" \
+                                      "image/vnd.microsoft.icon" \
+                                      "image/x-icon" \
+                                      "text/cache-manifest" \
+                                      "text/css" \
+                                      "text/html" \
+                                      "text/javascript" \
+                                      "text/plain" \
+                                      "text/vcard" \
+                                      "text/vnd.rim.location.xloc" \
+                                      "text/vtt" \
+                                      "text/x-component" \
+                                      "text/x-cross-domain-policy" \
+                                      "text/xml"
+ 
+    </IfModule>
+    <IfModule mod_mime.c>
+        AddEncoding gzip              svgz
+    </IfModule>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+	Options +FollowSymLinks -MultiViews -Indexes
+</IfModule>
+
+# Disable server signature
+ServerSignature Off

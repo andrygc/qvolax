@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+
+<head>
+    <title>Qvolax - Simple chat en vivo con PHP usando Ajax</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <meta name="title" content="Qvolax - Simple chat en vivo con PHP usando Ajax" />
+    <meta name="description" content="Simple chat en vivo con PHP usando Ajax" />
+    <meta name="keywords" content="Qvolax , Chat, Chat sin Java, Chat sin registro, Chat gratis" />
+    <meta name="author" content="andrygc" />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <link rel="shortcut icon" type="image/png" href="static/img/favicon.png" />
+
+    <link type="text/css" rel="stylesheet" href="static/css/animate.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/confirm.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/fancybox.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/pace.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/switchery.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/simple-line-icons.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/dataTables.bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="static/css/chat.css" />
+
+    <!--[if lt IE 9]>
+      		<script src="static/js/html5shiv.js"></script>
+      		<script src="static/js/respond.min.js"></script>
+    	<![endif]-->
+</head>
+
+<body app-view="index">
+    <header>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div id="mynavbar" class="container">
+                <a class="navbar-brand">Qvolax <i class="icon-speech" style="color: #41c4fe;"></i></a>
+                <ul class="nav navbar-search-user navbar-nav navbar-left hidden-xs hidden-sm">
+                    <li>
+                        <form class="navbar-form" onsubmit="return false;">
+
+                            <input id="search" class="form-control navbar-search" placeholder="Buscar usuario..."
+                                type="text">
+
+                            <div id="search-results"
+                                class="dropdown-menu animated fadeInUp dropdown-widget dropdown-open dropdown-search"
+                                style="display: none;">
+                                <div class="dropdown-widget-header">
+                                    Resultados de la búsqueda
+                                </div>
+                                <div class="dropdown-widget-body">
+                                    <div class="loader mt10 mb10"></div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </li>
+                </ul>
+
+
+                <div class="pull-right">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="cntonline" class="hidden-xs">
+                            <a role="button">
+                                <span class="badge">?</span> usuarios conectados
+                            </a>
+                        </li>
+                        <li id="view_user_list" show="0" class="opcion hidden">
+                            <a role="button">
+                                <i class="icon-people" style="font-size: 16px;"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown opcion">
+                            <a class="dropdown-toggle dropdown-mn" data-toggle="dropdown" role="button"
+                                aria-haspopup="true">
+                                <img id="myavatar" class="img-circle" src="uploads/thumbs/default.png" width="21"
+                                    height="21">
+                                <b style="margin-left: 8px;" class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-user-opcion animated fadeInUp">
+                                <li class="vis">
+                                    <a data-toggle="modal" href="#modal-login" role="button">
+                                        <i class="icon-login" style="margin-right: 5px;"></i>Iniciar sesi&oacute;n
+                                    </a>
+                                </li>
+                                <li class="divider vis"></li>
+                                <li class="vis">
+                                    <a data-toggle="modal" href="#modal-register" role="button">
+                                        <i class="icon-people" style="margin-right: 5px;"></i>Registrarse
+                                    </a>
+                                </li>
+                                <li class="qban hidden">
+                                    <a onclick="viewban();" role="button">
+                                        <i class="icon-ban" style="margin-right: 5px;"></i> Ver baneados
+                                    </a>
+                                </li>
+                                <li class="divider qban hidden"></li>
+                                <li class="tpic hidden">
+                                    <a data-toggle="modal" href="#modal-change-topic" role="button">
+                                        <i class="icon-note" style="margin-right: 5px;"></i> Cambiar topic
+                                    </a>
+                                </li>
+                                <li class="divider tpic hidden"></li>
+                                <li>
+                                    <a data-toggle="modal" href="#modal-change-data" role="button">
+                                        <i class="icon-user" style="margin-right: 5px;"></i> Modificar perfil
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a data-toggle="modal" href="#modal-change-avatar" role="button">
+                                        <i class="icon-camera" style="margin-right: 5px;"></i> Cambiar Avatar
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a data-toggle="modal" href="#changePass" role="button">
+                                        <i class="icon-note" style="margin-right: 5px;"></i> Cambiar contrase&ntilde;a
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a data-toggle="modal" href="#modal-change-prefer" role="button">
+                                        <i class="icon-settings" style="margin-right: 5px;"></i> Preferencias
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="javascript:close();" role="button">
+                                        <i class="icon-logout" style="margin-right: 5px;"></i> Cerrar sesi&oacute;n
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="log-false">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-lg-12" style="overflow: hidden;">
+                        <div class="col-lg-8 animated fadeInLeft">
+
+                            <div class="panel panel-default" style="position: relative;">
+                                <div class="panel-body">
+                                    <h5>Estadisticas de entradas:</h5>
+                                    <canvas id="linechart" style="padding-right: 25px;"></canvas>
+
+                                    <table style="position:absolute;top:10px;right:50px;font-size:9px;color:#666">
+                                        <tbody>
+                                            <tr>
+                                                <td class="legendColorBox">
+                                                    <div
+                                                        style="background:#41c4fe;width:6px;height:6px;border-radius:3px;">
+                                                    </div>
+                                                </td>
+                                                <td style="padding-left: 5px;">
+                                                    Total de visitas
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="legendColorBox">
+                                                    <div
+                                                        style="background:rgba(151,187,205,1);width:6px;height:6px;border-radius:3px;">
+                                                    </div>
+                                                </td>
+                                                <td style="padding-left: 5px;">
+                                                    Max. Conectados
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <footer>
+                                <div class="footer">
+                                    <div class="col-lg-12 text-center">
+                                        <p style="margin-bottom: 0px;">
+                                            Qvolax - Es un software de código abierto disponible
+                                            en <a href="https://github.com/andrygc/qvolax"
+                                                target="_blank">GitHub</a>
+                                        </p>
+                                        <p style="margin-bottom: 0px;">
+                                            Created by <a href="https://github.com/andrygc"
+                                                target="_blank">andrygc</a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </footer>
+                        </div>
+
+                        <div class="col-lg-4 animated fadeInRight">
+
+                            <div class="panel panel-default" style="margin-bottom: 15px;">
+                                <div class="panel-body">
+                                    <h5>Equipo Conectado:</h5>
+                                    <div class="showstaff text-center">
+                                        <a class="loader"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" style="margin-bottom: 15px;">
+                                <div class="panel-body">
+                                    <h5>Usuarios m&aacute;s Populares:</h5>
+                                    <div class="showrating text-center">
+                                        <a class="loader"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" style="margin-bottom: 15px;">
+                                <div class="panel-body">
+                                    <h5>Estadisticas de usuarios:</h5>
+                                    <div class="text-center">
+                                        <div>
+                                            <p align="left">
+                                                <small>Total</small>
+                                                <small class="tx-gray" id="total_de_users">?</small>
+                                            </p>
+                                            <div class="">
+                                                <div class="progress progress_sm">
+                                                    <div class="progress-bar bg-green" role="progressbar"
+                                                        data-transitiongoal="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p align="left">
+                                                <small>Hombres</small>
+                                                <small class="tx-gray" id="total_de_users_m">?</small>
+                                            </p>
+                                            <div class="">
+                                                <div class="progress progress_sm">
+                                                    <div class="progress-bar total_de_users_m bg-green"
+                                                        role="progressbar" data-transitiongoal=""></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p align="left">
+                                                <small>Mujeres</small>
+                                                <small class="tx-gray" id="total_de_users_f">?</small>
+                                            </p>
+                                            <div class="">
+                                                <div class="progress progress_sm">
+                                                    <div class="progress-bar total_de_users_f bg-green"
+                                                        role="progressbar" data-transitiongoal=""></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="log-true" style="display: none;">
+            <div class="row">
+                <div class="navbar-header header-start">
+                    <div class="header-privados">
+
+                        <!-- zone table active -->
+                        <ul id="zone-header" class="list-inline list-unstyled">
+                            <li zone="0" class="active">
+                                <img src="static/img/home.png" class="img-circle" width="44" height="42">
+                            </li>
+                        </ul>
+                        <!-- end zone table active -->
+
+                    </div>
+                    <div class="header-usuario">
+                        <!--(?) <i class="icon-people"></i>-->
+                    </div>
+                </div>
+                <div class="row">
+
+                    <!-- user list -->
+                    <div class="user-list"></div>
+                    <!-- end user list -->
+
+                    <!-- view profile -->
+                    <aside id="profile_view" class="view-profile animated">
+                        <div class="about clearfix">
+                            <div class="thumb">
+                                <div class="avatar">
+                                    <div class="avatar-image"></div>
+                                </div>
+                            </div>
+                            <div class="info">
+                                <h4>
+                                    <span class="unamenick">Unamenick</span> <small>[level]</small>
+                                </h4>
+                                <p>
+                                    <small class="data">Género, ??? a&ntilde;os</small>
+                                </p>
+                            </div>
+                            <nav>
+                                <button type="button" user-id="" class="init-charla btn btn-primary btn-block"><i
+                                        class="icon-bubbles"></i> Iniciar conversaci&oacute;n</button>
+                                <button type="button" user-id="" class="locked btn btn-danger btn-block"><i
+                                        class="icon-ban"></i> Bloquear usuario</button>
+                                <div class="extra"></div>
+                                <button class="btn btn-default back"><span>Volver atras ></span></button>
+                            </nav>
+                        </div>
+                    </aside>
+                    <!-- end view profile -->
+
+                    <div class="col-lg-12 col-xs-12 chat-container">
+
+                        <!-- zona de mensajes -->
+                        <div id="zone-boddy">
+
+                            <div id="float-mnu">
+                                <div style="width:100%;">Activos en P&uacute;blico</div>
+                                <div id="float-mnu2"></div>
+                                <div style="width:100%;">&Uacute;ltimas entradas</div>
+                                <div id="float-mnu4"></div>
+                            </div>
+
+                            <!-- publica -->
+                            <div zone-id="0">
+
+                                <div class="app-item">
+                                    <div class="app-item-msg">
+                                        <span class="tx-gray">*** Qvolax - Es un software de código abierto disponible
+                                            en <a href="https://github.com/andrygc/qvolax"
+                                                target="_blank">GitHub</a>.</span>
+                                    </div>
+                                </div>
+                                <!-- topic -->
+                                <div class="app-item">
+                                    <div class="app-item-msg">
+                                        <span class="tx-system">*** TOPIC: </span> <span class="topic"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- end zona de mensajes -->
+
+
+                        <div class="footer-start">
+                            <div id="msg_tooltip" role="tooltip" class="tooltip top" onclick="maxscroll(1);">
+                                <div class="tooltip-arrow"></div>
+                                <div class="tooltip-inner">
+                                    Tienes nuevos mensajes
+                                </div>
+                            </div>
+                            <ul class="nav navbar-nav navbar-left clearfix">
+                                <li>
+                                    <button data-toggle="button" type="button" class="btn btn-format btn-default btn-sm"
+                                        aria-pressed="false">
+                                        <b>B</b>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button data-toggle="button" type="button" class="btn btn-format btn-default btn-sm"
+                                        aria-pressed="false">
+                                        <i>I</i>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button data-toggle="button" type="button" class="btn btn-format btn-default btn-sm"
+                                        aria-pressed="false">
+                                        <u>U</u>
+                                    </button>
+                                </li>
+                                <li>
+                                    <input type="color" class="btn btn-format btn-default attcolor btn-xs"
+                                        value="#000000">
+                                </li>
+                                <li class="dropup">
+                                    <button id="showemot" type="button" data-toggle="dropdown"
+                                        class="btn btn-default btn-sm dropdown-toggle">
+                                        <i class="icon-emotsmile"></i> <span class="hidden-xs">Emoticons</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left emoticons dropup-m" role="menu"></ul>
+                                </li>
+                                <li class="dropup hidden-xs">
+                                    <button id="addfile" type="button" data-toggle="dropdown" disabled=""
+                                        class="btn btn-default btn-sm dropdown-toggle">
+                                        <i class="icon-paper-clip"></i> <span class="hidden-xs">Adjuntos</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left adjuntos dropup-m" role="menu">
+                                        <table class="table" style="margin-bottom: 0px;">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <button type="button"
+                                                            class="btn btn-block btn-sm btn-primary btn-upload-file"
+                                                            onclick="$('#upl-fil').trigger('click');">Subir
+                                                            Fichero</button>
+                                                        <form action="file.php" id="form-upload"
+                                                            enctype="multipart/form-data" method="post">
+                                                            <input type="file" name="file" id="upl-fil"
+                                                                class="form-control hidden"
+                                                                onchange="$('#form-upload').submit();">
+                                                            <input id="upload_sess" name="sess" type="text"
+                                                                class="hidden" value="">
+                                                        </form>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="files_contens">
+                                            </tbody>
+                                        </table>
+                                    </ul>
+                                </li>
+
+                                <!--
+                                <li class="dropup hidden-xs">
+                                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">
+                                        <i class="icon-playlist"></i> <span class="hidden-xs">M&uacute;sica</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right radio dropup-m" style="padding:5px 5px;padding-bottom: 0px;max-width: 258px;" role="menu">
+                                        <audio controls="controls" name="media" preload="none" style="width:245px;">
+                                            <source src="#" type="application/ogg">
+                                        </audio>
+                                    </ul>
+                                </li>
+                                -->
+
+
+                                <li class="dropup hidden-xs">
+                                    <button onclick="showrating(this);" show="0" type="button" data-toggle="dropdown"
+                                        class="btn btn-default btn-sm dropdown-toggle">
+                                        <i class="icon-bubbles"></i> <span class="hidden-xs">Ranking</span>
+                                    </button>
+                                    <ul class="dropdown-menu rating dropup-m" role="menu">
+                                        <div class="loader mt10 mb10"></div>
+                                    </ul>
+                                </li>
+
+                                <li class="dropup">
+                                    <button data-toggle="dropdown" class="btn btn-default btn-sm dropdown-toggle">
+                                        <i class="icon-more"></i> M&aacute;s
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right dropup-m" role="menu">
+                                        <li>
+                                            <a data-toggle="modal" href="#reglamento">
+                                                Reglamento
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="pull-right" style="padding-right: 6px;">
+                                    <small style="font-size:11px;">
+                                        (<span class="xpin">-5</span>) <span class="xlag">0.024</span>
+                                    </small>
+                                </li>
+                            </ul>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="input-group">
+                                        <input type="text" id="tx-mess" maxlength="200"
+                                            placeholder="Escriba su mensaje aqui..." style="border-radius: 0px;"
+                                            class="form-control">
+                                        <span class="input-group-addon btn" onclick="send_message();"
+                                            role="button">Enviar</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login -->
+    <div class="modal fade" id="modal-login">
+        <div class="modal-dialog login">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="icon-login"></i> Iniciar sesi&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form_signin" autocomplete="off" a role="form">
+                        <div class="form-group">
+                            <input name="username" id="log_us" maxlength="16" minlength="3" type="text"
+                                class="form-control" placeholder="Nombre de usuario" required="">
+                        </div>
+                        <div class="form-group">
+                            <input name="password" id="log_passw" minlength="6" type="password" class="form-control"
+                                placeholder="Contraseña" required="">
+                        </div>
+
+                        <button type="submit" class="btn btn-block btn-red">Iniciar</button>
+
+                        <!-- error -->
+                        <div class="alert alert-danger hidden" style="margin-top: 10px;margin-bottom: 0px;"
+                            role="alert"></div>
+                        <!-- error -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-register">
+        <div class="modal-dialog login">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Registrarse</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form_signup" method="post" autocomplete="off" role="form">
+                        <div class="form-group">
+                            <input id="reg_us" name="username" maxlength="16" minlength="3" type="text"
+                                class="form-control" placeholder="Nombre de usuario" required="">
+                        </div>
+                        <div class="form-group">
+                            <input id="reg_passw" name="password" minlength="6" type="password" class="form-control"
+                                placeholder="Ingrese una contrase&ntilde;a" required="">
+                        </div>
+                        <div class="form-group">
+                            <input id="reg_passw_reper" name="password_reper" minlength="6" type="password"
+                                class="form-control" placeholder="Repita la contrase&ntilde;a ingresada" required="">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="reg_age" name="age" class="form-control" value="" min="12" max="75"
+                                step="1" required="required" placeholder="Edad">
+                        </div>
+                        <div class="form-group">
+                            <select id="reg_sex" name="gender" class="form-control uneditable-input">
+                                <option value="?" selected="">Seleccione su género:</option>
+                                <option value="m">Hombre</option>
+                                <option value="f">Mujer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block btn-red">Registrarse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal expulsar y ban -->
+    <div class="modal fade" id="uban">
+        <div class="modal-dialog medium">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div id="form_uban" class="form-group" style="margin-bottom:0px;">
+                            <div class="col-md-12">
+                                <input type="number" id="uban_kill" class="hidden" value="">
+                                <input type="number" id="uban_user" class="hidden" value="">
+                                <textarea id="uban_motiv" class="form-control" rows="3"
+                                    required="required">No moleste a los dem&aacute;s...</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="$('#form_uban').submit();" class="btn btn-primary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal change avatar -->
+    <div class="modal fade" id="modal-change-avatar">
+        <div class="modal-dialog medium">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Cambiar avatar</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="position: relative;margin-bottom: 15px;">
+                        <div class="js-upload-avatar">
+                            <div style="position: relative;top:45%;" class="loader"></div>
+                        </div>
+                        <img id="tx-pflth" src="uploads/thumbs/default.png" width="100%">
+                    </div>
+                    <form id="form-change-avatar" action="upload.php" enctype="multipart/form-data" method="post">
+                        <input class="change-avatar-file form-control" type="file" name="avatar"
+                            onchange="$('#form-change-avatar').submit();">
+                        <input id="thumb_sess" name="sess" type="text" class="hidden" value="">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal change data -->
+    <div class="modal fade" id="modal-change-data">
+        <div class="modal-dialog medium">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Modificar perfil</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 0px;">
+                    <form class="form-horizontal form_changedata" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label for="edad">Edad:</label>
+                                <input type="number" id="tx-pflage" name="edad" class="form-control" value="" min="12"
+                                    max="75" step="1" required="required" title="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label for="sexo">Género:</label>
+                                <select name="sexo" id="tx-pflsex" class="form-control">
+                                    <option value="m">Hombre</option>
+                                    <option value="f">Mujer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label for="status">Stado:</label>
+                                <select name="status" id="tx-pflstatu" class="form-control">
+                                    <option value="1">En linea</option>
+                                    <option value="3">Ausente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-block btn-red">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal change preferencias -->
+    <div class="modal fade" id="modal-change-prefer">
+        <div class="modal-dialog medium">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Preferencias</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 0px;">
+                    <form class="form-horizontal form_changepref" role="form">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="prefnopv" type="checkbox" value="" data-plugin="switchery"
+                                            data-color="#42c4fd" data-size="small">
+                                        &nbsp;&nbsp;<small><b>No aceptar privados</b></small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="prefsound" type="checkbox" value="" data-plugin="switchery"
+                                            data-color="#42c4fd" data-size="small">
+                                        &nbsp;&nbsp;<small><b>Sin sonidos</b></small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-block btn-red">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal admin user -->
+    <div class="modal fade" id="adminuser">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Privilegios de Usuario</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" onsubmit="return false;">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-md-4 col-xs-4 control-label"
+                                    style="padding-top:0px;">Nick</label><label class="col-md-8 col-xs-8"
+                                    id="prof_nick">Nick</label>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-4 col-xs-4 control-label">Estrellas</label>
+                                <div class="col-md-4 col-xs-4">
+                                    <select id="prof_stars" class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-4 col-xs-4 control-label">Grupo</label>
+                                <div class="col-md-7 col-xs-7" id="status_xone"></div>
+                            </div>
+                        </div>
+                        <div class="mypriv">
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="128"> Cambiar Privilegios
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="64"> Cambiar grupos/estrellas
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="32"> Comandos
+                                        <!--Compartir ficheros-->
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="16"> Mutear/Desmutear
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="8"> Desbanear
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="4"> Banear
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="2"> Expulsar
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="checkbox col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10">
+                                    <label>
+                                        <input type="checkbox" priv="1"> Ver IP
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" class="field" id="prof_id" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <label type="button" class="btn btn-default" data-dismiss="modal">Cerrar</label>
+                    <button class="btn btn-primary" onClick="changepriv();">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- cambiar passw -->
+    <div class="modal fade" id="changePass">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Cambiar contrase&ntilde;a</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 0px;">
+                    <form id="chgpassw" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="changePass1" class="col-sm-3 control-label">Anterior:</label>
+                            <div class="col-sm-9">
+                                <input type="password" minlength="6" class="form-control" name="changePass1"
+                                    placeholder="Password" required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="changePass2" class="col-sm-3 control-label">Nueva:</label>
+                            <div class="col-sm-9">
+                                <input type="password" minlength="6" class="form-control" name="changePass2"
+                                    placeholder="Password" required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="changePass3" class="col-sm-3 control-label">Repetir:</label>
+                            <div class="col-sm-9">
+                                <input type="password" minlength="6" class="form-control" name="changePass3"
+                                    placeholder="Password" required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-block btn-red">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reglamento -->
+    <div class="modal fade" id="reglamento">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Reglamento</h4>
+                </div>
+                <div class="modal-body text-center" style="max-height: 450px;overflow: auto;">
+                    <p>
+                        <small>
+                            Este reglamento está basado y estructurado para lograr la satisfacción plena de cada
+                            usuario. Sirve de orientación para cada uno de los miembros, donde los mismos tendrán a su
+                            disposición todos los parámetros a seguir y cumplir con el fin de avanzar en estados. Lo que
+                            se expone a continuación es de estricto cumplimiento tanto por los usuarios como por el
+                            equipo de administración; por lo tanto ninguno podrá violar lo establecido en el.
+                        </small>
+                    </p>
+
+                    <h3>Acerca del chat:</h3>
+                    <small>
+                        <p>
+                            1- El desconocimiento del reglamento por parte del usuario, no exime a éste de cumplirlo y
+                            acatar la totalidad de sus reglas.
+                        </p>
+
+                        <p>
+                            2- El objetivo es propiciar un espacio para el debate de diversos temas de conversación y
+                            darles la oportunidad de conocer y ampliar su marco de amistades.
+                        </p>
+
+                        <p>
+                            3- Se le recomienda no usar como contraseña el mismo nombre de usuario, preferentemente
+                            elegir una contraseña compleja difícil de adivinar por otro usuario para evitar su pérdida.
+                        </p>
+
+                        <p>
+                            4- En la (Sala P&uacute;blica) no se permitir&aacute; la promoci&oacute;n de productos y
+                            servicios de ning&uacute;n tipo, como mismo hacer Spam o escribir texto usando el mismo
+                            color de fondo del sitio (blanco), ni citar nombres de usuarios repetidas veces sin escribir
+                            un mensaje con sentido l&oacute;gico, incumplir esta regla es motivo de expulsi&oacute;n.
+                        </p>
+                    </small>
+
+
+                    <h3>Acerca de los Usuarios:</h3>
+
+                    <small>
+
+                        <p>
+                            1- Su cuenta es personal e intransferible, y es el propietario de la misma, el máximo
+                            responsable del uso que se le dé a ella.
+                        </p>
+
+                        <p>
+                            2- No utilizar nombres de usuario vulgares, excluyentes, que infieran de forma directa o no
+                            su preferencia sexual, propagandísticos, político, que puedan prestarse para su
+                            interpretación explícita o con un doble sentido (en ambos casos el usuario será expulsado) y
+                            la cuenta será suspendida por parte del equipo de Administraci&oacute;n.
+                        </p>
+
+                        <p>
+                            3- Está prohibido cualquier tipo de insulto o amenaza tanto directa como indirecta a
+                            cualquier miembro, acosar, violentar, amenazar o causar molestias a cualquier otro
+                            participante, será motivo de expulsión inmediata por cualquier Operador presente en dicho
+                            momento.
+                        </p>
+
+                        <p>
+                            4- Queda terminantemente Prohibido hablar de política tanto en la sala como en los privados
+                            ya que este es un sitio para conocer amigos, de serlo así se tomaran las medidas
+                            establecidas por el equipo administrativo y se puede llegar hacer una queja a sus
+                            proveedores de servicios.
+                        </p>
+
+                        <p>
+                            5- Está prohibida la Publicidad de otros sitios en la Sala Pública.
+                        </p>
+
+                        <p>
+                            6- Los operadores tienen el permiso para llamar la atención tanto públicamente como en
+                            privado a un usuario siempre y cuando ellos lo vean conveniente debido el incumplimiento de
+                            uno de estos parámetros.
+                        </p>
+
+                        <p>
+                            7- Si un Administrador tiene seleccionada la opción (Ocupado) no debe ser molestado. Ni en
+                            sala ni en privado, cualquier duda o sugerencia pueden contactar con el grupo de Operadores
+                            que están para aconsejar, ayudar y orientar a cada miembro.
+                        </p>
+
+                        <p>
+                            8- Solo se podrá utilizar el idioma español en salas generales, pudiendo practicar otros
+                            idiomas vía privada.
+                        </p>
+
+                        <p>
+                            9- Cualquier duda, sugerencia pueden contar con los Operadores si ellos no pueden solucionar
+                            el problema son los encargados de comunicárselo a los Administradores.
+                        </p>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- desbanear -->
+    <div class="modal fade" id="uban_users">
+        <div class="modal-dialog large">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Desbanear usuarios</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="datatable" class="table table-bordered">
+                        <thead>
+                            <th>Desbanear</th>
+                            <th>Usuario</th>
+                            <th>Ip</th>
+                            <th>Operador</th>
+                            <th>Motivo</th>
+                            <th>date</th>
+                        </thead>
+                        <tbody id="users_ban">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-uban btn-primary" onClick="uban_users();">Desbanear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-change-topic">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Cambiar Topic</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="topic" class="form-control" rows="3" required="required"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="savetopic(0);" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sound"></div>
+    <a id="view_avatar" class="zoom" style="display: none;" href=""></a>
+</body>
+<script>
+    console.log("%c%s", "color:red;background:yellow;font-size:30px;", "ADVERTENCIA");
+    console.log("%c%s", "color:black;font-size:18px;", "-Si utilizas esta consola, otras personas podr\u00edan hacerse pasar por ti y robarte datos con el ataque Self-XSS.\n-Si decide hacer uso de la misma es completamente responsable de lo que su cuenta pueda sufrir.\n-No escribas ni pegues ning\u00fan c\u00f3digo que no entiendas.");
+</script>
+
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/js/scroll.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.form.js"></script>
+<script type="text/javascript" src="static/js/pace.min.js"></script>
+<script type="text/javascript" src="static/js/switchery.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="static/js/fancybox.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="static/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("a.zoom").fancybox({
+            padding: 3,
+            closeEffect: "elastic"
+        });
+    });
+</script>
+<script type="text/javascript" src="static/js/confirm.min.js"></script>
+<script type="text/javascript" src="static/js/favico.min.js"></script>
+<script type="text/javascript" src="static/js/chart.js"></script>
+<script type="text/javascript" src="static/js/bootstrap-progressbar.min.js"></script>
+<script type="text/javascript" src="static/js/chat.js"></script>
+
+</html>
